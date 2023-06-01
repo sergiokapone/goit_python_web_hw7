@@ -1,3 +1,9 @@
+"""
+У цьому коді визначено функції для виконання операцій CRUD (створення,
+читання, оновлення, видалення) на моделях даних, таких як Student, Group,
+Teacher, Subject і Grade.
+"""
+
 from database.models import Student, Group, Teacher, Subject, Grade
 from database.db import session
 

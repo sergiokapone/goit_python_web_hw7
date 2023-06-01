@@ -1,11 +1,19 @@
+"""Цей код являє собою сценарій для генерації випадкових даних про студентів,
+групи, вчителів, предмети та оцінки, а також їх додавання в базу даних.
+"""
+
 import random
 import logging
+
 from faker import Faker
 from database.repository import create_student,\
                                 create_group,\
                                 create_teacher,\
                                 create_subject,\
                                 create_grade
+
+
+
 
 fake = Faker("uk_UA")
 

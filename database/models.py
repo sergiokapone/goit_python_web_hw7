@@ -1,3 +1,9 @@
+
+"""
+У цьому коді визначаються моделі даних, які відображають структуру таблиць у
+базі даних, а також створюються всі таблиці у базі даних, які були визначені в моделях.
+"""
+
 from sqlalchemy import Column, DateTime, Integer, String, ForeignKey, func, event
 from sqlalchemy.orm import relationship, declarative_base
 from database.db import engine
