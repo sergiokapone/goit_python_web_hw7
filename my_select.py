@@ -4,8 +4,9 @@ from database.db import session
 
 
 
-# Найти 5 студентов с наибольшим средним баллом по всем предметам
 def select_1():
+    """ Знайти 5 студентів з найбільшим середнім балом по всім предметам"""
+
     students = session.query(Student.name).\
         join(Student.grades).\
         group_by(Student).\
@@ -15,8 +16,10 @@ def select_1():
     return students
 
 
-# Найти студента с наивысшим средним баллом по определенному предмету
+
 def select_2(subject_name):
+    """Знайти студента із найвищим середнім балом з певного предмета."""
+
     student = session.query(Student.name).\
         join(Student.grades).\
         join(Grade.subject).\
@@ -27,8 +30,10 @@ def select_2(subject_name):
     return student
 
 
-# Найти средний балл в группах по определенному предмету
+
 def select_3(subject_name):
+    """Знайти середній бал у групах з певного предмета."""
+
     avg_grades = session.query(Group.name, func.avg(Grade.value)).\
         join(Group.students).\
         join(Student.grades).\
@@ -39,14 +44,18 @@ def select_3(subject_name):
     return avg_grades
 
 
-# Найти средний балл на потоке (по всей таблице оценок)
+
 def select_4():
+    """Знайти середній бал на потоці (по всій таблиці оцінок)."""
+
     avg_grade = session.query(func.avg(Grade.value)).scalar()
     return avg_grade
 
 
-# Найти какие курсы читает определенный преподаватель
+
 def select_5(teacher_name):
+    """Знайти які курси читає певний викладач."""
+
     courses = session.query(Subject.name).\
         join(Subject.teacher).\
         filter(Teacher.name == teacher_name).\
@@ -54,8 +63,10 @@ def select_5(teacher_name):
     return courses
 
 
-# Найти список студентов в определенной группе
+
 def select_6(group_name):
+    """Знайти список студентів у певній групі."""
+
     students = session.query(Student).\
         join(Student.group).\
         filter(Group.name == group_name).\
@@ -63,8 +74,9 @@ def select_6(group_name):
     return students
 
 
-# Найти оценки студентов в отдельной группе по определенному предмету
 def select_7(group_name, subject_name):
+    """Знайти оцінки студентів у окремій групі з певного предмета."""
+
     grades = session.query(Grade).\
         join(Grade.student).\
         join(Grade.subject).\
@@ -74,8 +86,9 @@ def select_7(group_name, subject_name):
     return grades
 
 
-# Найти средний балл, который ставит определенный преподаватель по своим предметам
+
 def select_8(teacher_name):
+    """Знайти середній бал, який ставить певний викладач зі своїх предметів."""
     avg_grade = session.query(func.avg(Grade.value)).\
         join(Grade.subject).\
         join(Subject.teacher).\
@@ -84,8 +97,9 @@ def select_8(teacher_name):
     return avg_grade
 
 
-# Найти список курсов, которые посещает определенный студент
 def select_9(student_name):
+    """Знайти список курсів, які відвідує певний студент."""
+
     courses = session.query(Subject.name).\
         join(Subject.grades).\
         join(Grade.student).\
@@ -94,8 +108,10 @@ def select_9(student_name):
     return courses
 
 
-# Список курсов, которые определенному студенту читает определенный преподаватель
+
 def select_10(student_name, teacher_name):
+    """Список курсів, які певному студенту читає певний викладач."""
+
     courses = session.query(Subject.name).\
         join(Subject.teacher).\
         join(Subject.grades).\
@@ -105,19 +121,47 @@ def select_10(student_name, teacher_name):
     return courses
 
 
+def select_11(teacher_name, student_name):
+    """Середній бал, який певний викладач ставить певному студентові."""
+
+    avg_grade = session.query(func.avg(Grade.value)).\
+        join(Grade.student).\
+        join(Grade.subject).\
+        join(Subject.teacher).\
+        filter(Teacher.name == teacher_name).\
+        filter(Student.name == student_name).\
+        scalar()
+    return avg_grade
+
+
+def select_12(group_name, subject_name):
+    """Оцінки студентів у певній групі з певного предмета на останньому занятті."""
+
+    grades = session.query(Grade).\
+        join(Grade.student).\
+        join(Grade.subject).\
+        join(Subject.teacher).\
+        join(Student.group).\
+        filter(Group.name == group_name).\
+        filter(Subject.name == subject_name).\
+        order_by(Grade.created_at.desc()).\
+        limit(1).\
+        all()
+    return grades
+
+
 
 
 def execute_query(query_func, *args):
-    # Установка соединения с базой данных
+    # З'єднання з базою даних
     db_session = session
 
-    # Выполнение запроса
+    # Виконання запиту
     result = query_func(*args)
 
-    # Закрытие соединения с базой данных
+    # закриття сесії
     db_session.close()
 
-    # Возврат результата
     return result
 
 
