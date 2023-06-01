@@ -178,13 +178,17 @@ if __name__ == '__main__':
         (select_7, "Группа 2", "История"),
         (select_8, "Петров"),
         (select_9, "Иванов"),
-        (select_10,),
+        (select_10, "Іванов", "Петров"),
     ]
 
 
 
 
-    print(execute_query(select_3, "Математика"))
-
+    # Виклик функції execute_query для кожного запиту
+    for i, query in enumerate(queries):
+        docstring = query[0].__doc__
+        print(f"{i+1}: {docstring}\n")
+        print(f"Результат: {execute_query(*query)}")
+        print("="*79)
 
 

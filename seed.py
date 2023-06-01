@@ -13,8 +13,6 @@ from database.repository import create_student,\
                                 create_grade
 
 
-
-
 fake = Faker("uk_UA")
 
 # Конфігурація логування
