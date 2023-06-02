@@ -5,7 +5,7 @@ set ALEMBIC_PATH=.venv\Scripts
 set ALEMBIC_CONFIG=alembic.ini
 
 :menu
-REM Меню выбора действия
+REM Меню вибору дії
 cls
 echo 1. Сгенерировать миграцию
 echo 2. Применить все миграции

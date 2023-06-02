@@ -7,7 +7,7 @@ from database.db import session
 def select_1():
     """ Знайти 5 студентів з найбільшим середнім балом по всім предметам"""
 
-    students = session.query(Student.name).\
+    students = session.query(Student.name, func.avg(Grade.value)).\
         join(Student.grades).\
         group_by(Student).\
         order_by(func.avg(Grade.value).desc()).\
@@ -20,24 +20,28 @@ def select_1():
 def select_2(subject_name):
     """Знайти студента із найвищим середнім балом з певного предмета."""
 
-    student = session.query(Student.name).\
+    student = session.query(Student.name, Subject.name, func.avg(Grade.value)).\
         join(Student.grades).\
         join(Grade.subject).\
         filter(Subject.name == subject_name).\
-        group_by(Student).\
+        group_by(Student, Subject).\
         order_by(func.avg(Grade.value).desc()).\
         first()
     return student
 
 
 
+
+
+
 def select_3(subject_name):
     """Знайти середній бал у групах з певного предмета."""
 
-    avg_grades = session.query(Group.name, func.avg(Grade.value)).\
+    avg_grades = session.query(Group.name, Subject.name, func.avg(Grade.value)).\
         join(Group.students).\
         join(Student.grades).\
         join(Grade.subject).\
+        group_by(Subject).\
         filter(Subject.name == subject_name).\
         group_by(Group).\
         all()
@@ -67,7 +71,7 @@ def select_5(teacher_name):
 def select_6(group_name):
     """Знайти список студентів у певній групі."""
 
-    students = session.query(Student).\
+    students = session.query(Student.name).\
         join(Student.group).\
         filter(Group.name == group_name).\
         all()
@@ -77,7 +81,7 @@ def select_6(group_name):
 def select_7(group_name, subject_name):
     """Знайти оцінки студентів у окремій групі з певного предмета."""
 
-    grades = session.query(Grade).\
+    grades = session.query(Group.name , Student.name, Subject.name, Grade.value).\
         join(Grade.student).\
         join(Grade.subject).\
         join(Student.group).\
@@ -95,6 +99,7 @@ def select_8(teacher_name):
         filter(Teacher.name == teacher_name).\
         scalar()
     return avg_grade
+
 
 
 def select_9(student_name):
@@ -137,7 +142,7 @@ def select_11(teacher_name, student_name):
 def select_12(group_name, subject_name):
     """Оцінки студентів у певній групі з певного предмета на останньому занятті."""
 
-    grades = session.query(Grade).\
+    grades = session.query(Student.name, Grade.value).\
         join(Grade.student).\
         join(Grade.subject).\
         join(Subject.teacher).\
@@ -145,7 +150,6 @@ def select_12(group_name, subject_name):
         filter(Group.name == group_name).\
         filter(Subject.name == subject_name).\
         order_by(Grade.created_at.desc()).\
-        limit(1).\
         all()
     return grades
 
@@ -173,12 +177,14 @@ if __name__ == '__main__':
         (select_2, "Математика"),
         (select_3, "Фізика"),
         (select_4,),
-        (select_5, "Иванов"),
-        (select_6, "Группа 1"),
-        (select_7, "Группа 2", "История"),
-        (select_8, "Петров"),
-        (select_9, "Иванов"),
-        (select_10, "Іванов", "Петров"),
+        (select_5, "Алевтин Сірко"),
+        (select_6, "ФФ-11"),
+        (select_7, "ФФ-12", "Фізика"),
+        (select_8, "Соломон Євдокименко"),
+        (select_9, "Юхим Лагода"),
+        (select_10, "Ада Ґереґа", "Соломон Євдокименко"),
+        (select_11, "Алевтин Сірко", "Сніжана Хоменко"),
+        (select_12, "ФФ-13", "Фізика"),
     ]
 
 
