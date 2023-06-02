@@ -19,11 +19,11 @@
 Меню скрипта має вигляд:
 
 ```text
-1. Згенерувати міграцію
-2. Застосувати всі міграції
-3. Відкотити останню міграцію
-4. Переглянути поточний стан міграцій
-5. Вийти
+1. Generate a migration
+2. Apply all migrations
+3. Rollback the last migration
+4. View the current migration status
+5. Exit
 ```
 
 ## Сртуктура проекту
