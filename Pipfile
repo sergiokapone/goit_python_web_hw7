@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://github.com/sergiokapone/goit_python_web_hw7"
 verify_ssl = true
 name = "pypi"
 
@@ -8,7 +8,6 @@ sqlalchemy = "*"
 psycopg2 = "*"
 alembic = "*"
 faker = "*"
-prettytable = "*"
 
 [dev-packages]
 
