@@ -52,14 +52,14 @@
 ## CLI для CRUD
 
 ```bash
-usage: main.py [-h] [--action ACTION] [--model MODEL] [--id ID] [--name NAME] [--subject SUBJECT] [--value VALUE] [--list LIST]
+usage: main.py [-h] [--action ACTION] [--model MODEL] [--id ID] [--name NAME] [--subject SUBJECT] [--value VALUE]
 
 Students DB
 
 options:
   -h, --help            show this help message and exit
   --action ACTION, -a ACTION
-                        Commands: create, update, get, remove
+                        Commands: create, update, get, remove, list
   --model MODEL, -m MODEL
                         Models: Teacher, Group, Student, Subject, Grade
   --id ID               ID of the object
@@ -68,7 +68,6 @@ options:
                         Subject of the object
   --value VALUE, -v VALUE
                         Value of the object
-  --list LIST, -l LIST  List of the objects
 ```
 
 ### Приклади виконання команд у терміналі.
