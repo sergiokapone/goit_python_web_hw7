@@ -22,7 +22,7 @@ id = my_args.get('id')
 name = my_args.get('name')
 subject = my_args.get('subject')
 value = my_args.get('value')
-list_ = my_args.get('list')
+
 
 # Конфигурация логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

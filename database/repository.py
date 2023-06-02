@@ -39,7 +39,7 @@ def list_students():
     students = session.query(Student).all()
     if students:
         for student in students:
-            print(f"Student ID: {student.id}, Name: {student.name}")
+            print(f"ID: {student.id}, Name: {student.name}")
     else:
         print("No students found.")
 
@@ -76,7 +76,7 @@ def list_groups():
     groups = session.query(Group).all()
     if groups:
         for group in groups:
-            print(f"Group ID: {group.id}, Name: {group.name}")
+            print(f"ID: {group.id}, Name: {group.name}")
     else:
         print("No groups found.")
 
@@ -111,7 +111,7 @@ def list_teachers():
     teachers = session.query(Teacher).all()
     if teachers:
         for teacher in teachers:
-            print(f"Teacher ID: {teacher.id}, Name: {teacher.name}")
+            print(f"ID: {teacher.id}, Name: {teacher.name}")
     else:
         print("No teachers found.")
 
@@ -146,7 +146,7 @@ def list_subjects():
     subjects = session.query(Subject).all()
     if subjects:
         for subject in subjects:
-            print(f"Teacher ID: {subject.id}, Name: {subject.name}")
+            print(f"ID: {subject.id}, Name: {subject.name}")
     else:
         print("No subjects found.")
 
