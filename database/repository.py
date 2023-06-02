@@ -35,6 +35,15 @@ def delete_student(student_id):
     session.delete(student)
     session.commit()
 
+def list_students():
+    students = session.query(Student).all()
+    if students:
+        for student in students:
+            print(f"Student ID: {student.id}, Name: {student.name}")
+    else:
+        print("No students found.")
+
+
 
 # Функції для моделі Group
 
@@ -63,6 +72,15 @@ def delete_group(group_id):
     session.commit()
 
 
+def list_groups():
+    groups = session.query(Group).all()
+    if groups:
+        for group in groups:
+            print(f"Group ID: {group.id}, Name: {group.name}")
+    else:
+        print("No groups found.")
+
+
 # Функции для модели Teacher
 
 def create_teacher(name):
@@ -88,6 +106,14 @@ def delete_teacher(teacher_id):
     teacher = session.query(Teacher).get(teacher_id)
     session.delete(teacher)
     session.commit()
+
+def list_teachers():
+    teachers = session.query(Teacher).all()
+    if teachers:
+        for teacher in teachers:
+            print(f"Teacher ID: {teacher.id}, Name: {teacher.name}")
+    else:
+        print("No teachers found.")
 
 
 # Функции для модели Subject
@@ -115,6 +141,14 @@ def delete_subject(subject_id):
     subject = session.query(Subject).get(subject_id)
     session.delete(subject)
     session.commit()
+
+def list_subjects():
+    subjects = session.query(Subject).all()
+    if subjects:
+        for subject in subjects:
+            print(f"Teacher ID: {subject.id}, Name: {subject.name}")
+    else:
+        print("No subjects found.")
 
 
 # Функции для модели Grade

@@ -11,6 +11,7 @@ parser.add_argument('--id', help='ID of the object')
 parser.add_argument('--name', '-n', help='Name of the object')
 parser.add_argument('--subject', '-s', help='Subject of the object')
 parser.add_argument('--value', '-v', help='Value of the object')
+parser.add_argument('--list', '-l', help='List of the objects')
 
 # Парсинг аргументов командной строки
 arguments = parser.parse_args()
@@ -22,6 +23,7 @@ id = my_args.get('id')
 name = my_args.get('name')
 subject = my_args.get('subject')
 value = my_args.get('value')
+list_ = my_args.get('list')
 
 # Конфигурация логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -143,6 +145,23 @@ def get():
     except Exception as e:
         logging.error('Error occurred during get operation: %s', str(e))
 
+def list_():
+    try:
+
+        match model:
+            case 'Teacher':
+                list_teachers()
+            case 'Group':
+                list_groups()
+            case 'Student':
+                list_students()
+            case 'Subject':
+                list_subjects()
+            case 'Grade':
+                list_grades()
+
+    except Exception as e:
+        logging.error('Error occurred during get operation: %s', str(e))
 
 # Виклик відповідної функції залежно від команди
 match action:
@@ -154,5 +173,7 @@ match action:
         remove()
     case 'get':
         get()
+    case 'list':
+        list_()
     case _:
         parser.print_help()
