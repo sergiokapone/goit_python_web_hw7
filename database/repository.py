@@ -4,6 +4,7 @@
 Teacher, Subject і Grade.
 """
 
+from sqlalchemy import func
 from database.models import Student, Group, Teacher, Subject, Grade
 from database.db import session
 
@@ -141,3 +142,29 @@ def delete_grade(grade_id):
     grade = session.query(Grade).get(grade_id)
     session.delete(grade)
     session.commit()
+
+
+def get_max_students_count():
+
+    max_count = session.query(func.count(Student.id)).scalar()
+    return max_count
+
+
+def get_max_groups_count():
+
+    max_count = session.query(func.count(Group.id)).scalar()
+    return max_count
+
+
+def get_max_teachers_count():
+
+    max_count = session.query(func.count(Teacher.id)).scalar()
+    return max_count
+
+
+def get_max_subjects_count():
+
+    max_count = session.query(func.count(Subject.id)).scalar()
+    return max_count
+
+
