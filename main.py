@@ -5,7 +5,7 @@ from database.repository import *
 
 # Создание парсера аргументов командной строки
 parser = ArgumentParser(description='Students DB')
-parser.add_argument('--action', '-a', help='Commands: create, update, get, remove, list')
+parser.add_argument('--action', '-a', help='Commands: create, get, update, remove, list')
 parser.add_argument('--model', '-m', help='Models: Teacher, Group, Student, Subject, Grade')
 parser.add_argument('--id', help='ID of the object')
 parser.add_argument('--name', '-n', help='Name of the object')

@@ -59,7 +59,7 @@ Students DB
 options:
   -h, --help            show this help message and exit
   --action ACTION, -a ACTION
-                        Commands: create, update, get, remove, list
+                        Commands: create, get, update, remove, list
   --model MODEL, -m MODEL
                         Models: Teacher, Group, Student, Subject, Grade
   --id ID               ID of the object
