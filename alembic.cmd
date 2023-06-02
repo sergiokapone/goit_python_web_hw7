@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 > nul
+::chcp 65001 > nul
 
 set ALEMBIC_PATH=.venv\Scripts
 set ALEMBIC_CONFIG=alembic.ini
@@ -7,11 +7,12 @@ set ALEMBIC_CONFIG=alembic.ini
 :menu
 REM Меню вибору дії
 cls
-echo 1. Сгенерировать миграцию
-echo 2. Применить все миграции
-echo 3. Откатить последнюю миграцию
-echo 4. Просмотреть текущее состояние миграций
-echo 5. Выйти
+echo 1. Generate a migration
+echo 2. Apply all migrations
+echo 3. Rollback the last migration
+echo 4. View the current migration status
+echo 5. Exit
+echo.
 
 set /p CHOICE=">>> "
 if %CHOICE%==1 goto generate
@@ -19,13 +20,13 @@ if %CHOICE%==2 goto upgrade
 if %CHOICE%==3 goto downgrade
 if %CHOICE%==4 goto current_state
 if %CHOICE%==5 exit
-echo.
+
 
 goto menu
 
 REM Команда для створення порожньої міграції
 :generate
-set /p MIGRATION_NAME="Выберите имя миграции: "
+set /p MIGRATION_NAME="Select a migration name: "
 %ALEMBIC_PATH%\alembic.exe -c %ALEMBIC_CONFIG% revision --autogenerate -m "%MIGRATION_NAME%"
 pause
 goto menu
