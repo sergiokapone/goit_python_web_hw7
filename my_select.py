@@ -56,9 +56,6 @@ def select_2(subject_name):
 
 
 
-
-
-
 def select_3(subject_name):
     """Знайти середній бал у групах з певного предмета."""
 

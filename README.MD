@@ -68,6 +68,8 @@ docker run --name students -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgre
 
 ## CLI для CRUD
 
+`main.py` є інтерфейсом командного рядка (CLI). який дає змогу взаємодіяти з базою даних студентів із командного рядка, виконуючи різні операції ([CRUD](https://uk.wikipedia.org/wiki/CRUD)) з об'єктами моделей: створення, оновлення, видалення, отримання інформації та виведення списку:
+
 ```shell
 usage: main.py [-h] [--action ACTION] [--model MODEL] [--id ID] [--name NAME] [--subject SUBJECT] [--value VALUE]
 
