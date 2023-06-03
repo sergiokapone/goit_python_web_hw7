@@ -7,33 +7,32 @@
 
 ## Установка і запуск проекту
 
-Для управління залежностями проекту використовується `pipenv`. Будь ласка, переконайтеся, що у вас встановлено `pipenv` перед виконанням наступних кроків.
+Для управління залежностями проекту використовується `pipenv`. Необхідно встановити `pipenv` перед виконанням наступних кроків:
 
-1. Склонируйте репозиторий:
+- Склонируйте репозиторий:
 
-   ```shell
-   git clone https://github.com/sergiokapone/goit_python_web_hw7.git
-   ```
+  ```shell
+  git clone https://github.com/sergiokapone/goit_python_web_hw7.git
+  ```
 
-   Для встановлення залежностей використайте команду `pipenv install` або `pipenv sync`.
+- Для встановлення залежностей використайте команду `pipenv install` або `pipenv sync`.
 
 ## Сртуктура проекту
 
 ```text
 .
 ├── alembic/
-│   └── versions/           # Директорія з файлами міграцій
+│   ├── versions/           # Директорія з файлами міграцій
+│   └── env.py
 ├── database/
 │   ├── db.py               # Код для керування підключенням до бази даних
 │   ├── models.py           # Визначення моделей даних
 │   └── repository.py       # Код виконання операцій CRUD
-├── .gitignore
 ├── Pipfile
 ├── alembic.cmd             # Робота з міграціями
 ├── docker_run.cmd          # Запуск контейнера з базою даних
 ├── alembic.ini             # Налаштування alembic
 ├── config.ini              # Налаштування для підключення до бази даних
-├── Pipfile.lock
 ├── README.MD
 ├── main.py                 # Код CLI для операцій CRUD
 ├── my_select.py            # Код для запитів до бази даних
@@ -42,7 +41,11 @@
 
 ## Запуск бази данних
 
-Для запуску бази данних запустіть файл `docker_run.cmd`, або команду `docker run --name students -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres`.
+Для запуску бази данних запустіть файл `docker_run.cmd`, або команду
+
+```shell
+docker run --name students -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
+```
 
 ## Створення міграцій
 
@@ -65,7 +68,7 @@
 
 ## CLI для CRUD
 
-```bash
+```shell
 usage: main.py [-h] [--action ACTION] [--model MODEL] [--id ID] [--name NAME] [--subject SUBJECT] [--value VALUE]
 
 Students DB
