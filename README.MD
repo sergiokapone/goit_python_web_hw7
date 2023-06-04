@@ -98,6 +98,9 @@ options:
 - Створити групу: `python main.py -a create -m Group -n "AD-101"`
 - ...
 
+[]
+[![Відео роботи](./pictures/app.png)](https://www.youtube.com/watch?v=hYscVxaG_Es)
+
 ## Допоміжний софт
 
 Для роботи з базою данних сожна використати [HeidiSQL](https://www.heidisql.com/download.php)
