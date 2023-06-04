@@ -5,7 +5,7 @@ from sqlalchemy import Float, func
 
 
 from database.models import Student, Group, Teacher, Subject, Grade
-from database.db import session
+from database.db import DBSession, check_connection
 from sqlalchemy import cast
 from database.repository import get_all_teachers,\
                                 get_all_students,\
@@ -13,31 +13,31 @@ from database.repository import get_all_teachers,\
                                 get_all_groups
 
 
-def select_random_teacher():
-    all_teachers = get_all_teachers()
+def select_random_teacher(session):
+    all_teachers = get_all_teachers(session)
     random_teacher = random.choice(all_teachers)
     return random_teacher.name
 
 
-def select_random_student():
-    all_students = get_all_students()
+def select_random_student(session):
+    all_students = get_all_students(session)
     random_student = random.choice(all_students)
     return random_student.name
 
 
-def select_random_group():
-    all_groups = get_all_groups()
+def select_random_group(session):
+    all_groups = get_all_groups(session)
     random_group = random.choice(all_groups)
     return random_group.name
 
 
-def select_random_subject():
-    all_subjects = get_all_subjects()
+def select_random_subject(session):
+    all_subjects = get_all_subjects(session)
     random_subject = random.choice(all_subjects)
     return random_subject.name
 
 
-def select_1():
+def select_1(session):
     """ Знайти 5 студентів з найбільшим середнім балом по всім предметам"""
 
     students = session.query(Student.name, cast(func.avg(Grade.value), Float)).\
@@ -50,7 +50,7 @@ def select_1():
 
 
 
-def select_2(subject_name):
+def select_2(session, subject_name):
     """Знайти студента із найвищим середнім балом з певного предмета."""
 
     student = session.query(Student.name, Subject.name, cast(func.avg(Grade.value), Float)).\
@@ -64,7 +64,7 @@ def select_2(subject_name):
 
 
 
-def select_3(subject_name):
+def select_3(session, subject_name):
     """Знайти середній бал у групах з певного предмета."""
 
     avg_grades = session.query(Group.name, Subject.name, cast(func.avg(Grade.value), Float)).\
@@ -79,7 +79,7 @@ def select_3(subject_name):
 
 
 
-def select_4():
+def select_4(session):
     """Знайти середній бал на потоці (по всій таблиці оцінок)."""
 
     avg_grade = session.query(cast(func.avg(Grade.value), Float)).scalar()
@@ -87,7 +87,7 @@ def select_4():
 
 
 
-def select_5(teacher_name):
+def select_5(session, teacher_name):
     """Знайти які курси читає певний викладач."""
 
     courses = session.query(Teacher.name, Subject.name).\
@@ -98,7 +98,7 @@ def select_5(teacher_name):
 
 
 
-def select_6(group_name):
+def select_6(session, group_name):
     """Знайти список студентів у певній групі."""
 
     students = session.query(Student.name).\
@@ -108,7 +108,7 @@ def select_6(group_name):
     return students
 
 
-def select_7(group_name, subject_name):
+def select_7(session, group_name, subject_name):
     """Знайти оцінки студентів у окремій групі з певного предмета."""
 
     grades = session.query(Group.name , Student.name, Subject.name, Grade.value).\
@@ -121,7 +121,7 @@ def select_7(group_name, subject_name):
 
 
 
-def select_8(teacher_name):
+def select_8(session, teacher_name):
     """Знайти середній бал, який ставить певний викладач зі своїх предметів."""
     avg_grade = session.query(cast(func.avg(Grade.value), Float)).\
         join(Subject, Subject.id == Grade.subject_id).\
@@ -134,7 +134,7 @@ def select_8(teacher_name):
 
 
 
-def select_9(student_name):
+def select_9(session, student_name):
     """Знайти список курсів, які відвідує певний студент."""
 
     courses = session.query(Student.name, Subject.name).\
@@ -147,7 +147,7 @@ def select_9(student_name):
 
 
 
-def select_10(student_name, teacher_name):
+def select_10(session, student_name, teacher_name):
     """Список курсів, які певному студенту читає певний викладач."""
 
     courses = session.query(Student.name, Subject.name, Teacher.name).\
@@ -160,7 +160,7 @@ def select_10(student_name, teacher_name):
     return courses
 
 
-def select_11(student_name, teacher_name):
+def select_11(session, student_name, teacher_name):
     """Середній бал, який певний викладач ставить певному студентові."""
 
     avg_grade = session.query(cast(func.avg(Grade.value), Float)).\
@@ -173,7 +173,7 @@ def select_11(student_name, teacher_name):
     return avg_grade
 
 
-def select_12(group_name, subject_name):
+def select_12(session, group_name, subject_name):
     """Оцінки студентів у певній групі з певного предмета на останньому занятті."""
 
     grades = session.query(Subject.name, Group.name, Student.name, Grade.value).\
@@ -190,49 +190,41 @@ def select_12(group_name, subject_name):
 
 
 
-def execute_query(query_func, *args):
+def execute_query(session, query_func, *args):
 
-    try:
-        # З'єднання з базою даних
-        db_session = session
-
-        # Виконання запиту
-        result = query_func(*args)
-
-        # Закриття сесії
-        db_session.close()
-    except Exception:
-        return "Can not connect with database." 
-
+    # Виконання запиту
+    result = query_func(session, *args)
 
     return result
 
 
 if __name__ == '__main__':
-   
-    queries = [
-        (select_1,),
-        (select_2, select_random_subject()),
-        (select_3, select_random_subject()),
-        (select_4,),
-        (select_5, select_random_teacher()),
-        (select_6, select_random_group()),
-        (select_7, select_random_group(), select_random_subject()),
-        (select_8, select_random_teacher()),
-        (select_9,  select_random_student()),
-        (select_10, select_random_student(), select_random_teacher()),
-        (select_11, select_random_student(), select_random_teacher()),
-        (select_12, select_random_group(), select_random_subject()),
-    ]
 
 
+    if check_connection():
 
+        with DBSession() as session:
 
-    # Виклик функції execute_query для кожного запиту
-    for i, query in enumerate(queries):
-        docstring = query[0].__doc__
-        print(f"{i+1}: {docstring}\n")
-        pprint(execute_query(*query))
-        print("="*79)
+            queries = [
+            (select_1,),
+            (select_2, select_random_subject(session)),
+            (select_3, select_random_subject(session)),
+            (select_4,),
+            (select_5, select_random_teacher(session)),
+            (select_6, select_random_group(session)),
+            (select_7, select_random_group(session), select_random_subject(session)),
+            (select_8, select_random_teacher(session)),
+            (select_9,  select_random_student(session)),
+            (select_10, select_random_student(session), select_random_teacher(session)),
+            (select_11, select_random_student(session), select_random_teacher(session)),
+            (select_12, select_random_group(session), select_random_subject(session)),
+        ]
+                    
+        # Виклик функції execute_query для кожного запиту
+        for i, query in enumerate(queries):
+            docstring = query[0].__doc__
+            print(f"{i+1}: {docstring}\n")
+            pprint(execute_query(session, *query))
+            print("="*79)
 
 

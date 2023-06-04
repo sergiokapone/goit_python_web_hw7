@@ -79,7 +79,7 @@ if check_connection():
     for _ in range(50):
         student_name = fake.name()
         group = random.choice(groups)
-        student = create_student(session=session, name=student_name, group=group)
+        student = create_student(session=session, name=student_name, group_id=group.id)
 
         # Створюємо 20 оцінок для кожного студента з усіх предметів
         for _ in range(20):
