@@ -8,7 +8,7 @@
 import logging
 from argparse import ArgumentParser
 import database.repository as dr
-from database.db import DBSession
+from database.db import DBSession, check_connection
 
 
 
@@ -177,21 +177,20 @@ def list_(session):
 if __name__ == "__main__":
 
 
-    # Створення сесії
+    if check_connection():
+        # Виклик відповідної функції залежно від команди
 
-    # Виклик відповідної функції залежно від команди
-
-    with DBSession() as session:
-        match action:
-            case 'create':
-                create(session)
-            case 'update':
-                update(session)
-            case 'remove':
-                remove(session)
-            case 'get':
-                get(session)
-            case 'list':
-                list_(session)
-            case _:
-                parser.print_help()
+        with DBSession() as session:
+            match action:
+                case 'create':
+                    create(session)
+                case 'update':
+                    update(session)
+                case 'remove':
+                    remove(session)
+                case 'get':
+                    get(session)
+                case 'list':
+                    list_(session)
+                case _:
+                    parser.print_help()
