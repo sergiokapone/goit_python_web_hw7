@@ -7,6 +7,8 @@
 
 ## Демонстація роботи застосунку (відеофрагмент)
 
+![Відео роботи](./pictures/app.gif)
+
 [![Відео роботи](./pictures/app.png)](https://www.youtube.com/watch?v=hYscVxaG_Es)
 
 ## Установка і запуск проекту
