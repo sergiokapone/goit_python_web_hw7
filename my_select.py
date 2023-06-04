@@ -1,9 +1,6 @@
 from pprint import pprint
 import random
 from sqlalchemy import Float, func
-
-
-
 from database.models import Student, Group, Teacher, Subject, Grade
 from database.db import DBSession, check_connection
 from sqlalchemy import cast
@@ -49,7 +46,6 @@ def select_1(session):
     return students
 
 
-
 def select_2(session, subject_name):
     """Знайти студента із найвищим середнім балом з певного предмета."""
 
@@ -61,7 +57,6 @@ def select_2(session, subject_name):
         order_by(func.avg(Grade.value).desc()).\
         first()
     return [student]
-
 
 
 def select_3(session, subject_name):
@@ -78,13 +73,11 @@ def select_3(session, subject_name):
     return avg_grades
 
 
-
 def select_4(session):
     """Знайти середній бал на потоці (по всій таблиці оцінок)."""
 
     avg_grade = session.query(cast(func.avg(Grade.value), Float)).scalar()
     return avg_grade
-
 
 
 def select_5(session, teacher_name):
@@ -95,7 +88,6 @@ def select_5(session, teacher_name):
         filter(Teacher.name == teacher_name).\
         all()
     return courses
-
 
 
 def select_6(session, group_name):
