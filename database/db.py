@@ -6,6 +6,8 @@
 
 import configparser
 from pathlib import Path
+from sqlalchemy.exc import OperationalError
+
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -20,9 +22,19 @@ password = config.get('DB', 'PASSWORD')
 database_name = config.get('DB', 'DB_NAME')
 domain = config.get('DB', 'DOMAIN')
 port= config.get('DB', 'PORT')
-
 url = f'postgresql://{user_name}:{password}@{domain}:{port}/{database_name}'
 
+def check_connection():
+    try:
+        engine = create_engine(url, echo=False)
+        conn = engine.connect()
+        conn.close()
+        print("The connection to the database is established.")
+        return True
+    except OperationalError:
+        print("Failed to connect to the database.")
+        return False
+
 engine = create_engine(url, echo=False)
-DBSession = sessionmaker(bind = engine)
-session = DBSession()
+DBSession = sessionmaker(bind=engine)
+

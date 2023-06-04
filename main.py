@@ -7,19 +7,22 @@
 
 import logging
 from argparse import ArgumentParser
-from database.repository import *
+import database.repository as dr
+from database.db import DBSession
 
 
-# Создание парсера аргументов командной строки
+
+# Creating a command line argument parser
 parser = ArgumentParser(description='Students DB')
 parser.add_argument('--action', '-a', help='Commands: create, get, update, remove, list')
 parser.add_argument('--model', '-m', help='Models: Teacher, Group, Student, Subject, Grade')
 parser.add_argument('--id', help='ID of the object')
 parser.add_argument('--name', '-n', help='Name of the object')
 parser.add_argument('--subject', '-s', help='Subject of the object')
+parser.add_argument('--group', '-g', help='Group of the student')
 parser.add_argument('--value', '-v', help='Value of the object')
 
-# Парсинг аргументов командной строки
+# Parsing command line arguments
 arguments = parser.parse_args()
 my_args = vars(arguments)
 
@@ -29,43 +32,44 @@ id = my_args.get('id')
 name = my_args.get('name')
 subject = my_args.get('subject')
 value = my_args.get('value')
+group = my_args.get('group')
 
-
-# Конфигурация логирования
+#  Logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Определение функций для CRUD операций
 
-def create():
+#  Defining functions for CRUD operations
+
+def create(session):
     try:
         if not name:
             raise ValueError('Name parameter is missing')
 
         match model:
             case 'Teacher': 
-                create_teacher(name)
+                dr.create_teacher(session, name)
                 logging.info('Teacher created: %s', name)
             case 'Group': 
-                create_group(name)
+                dr.create_group(session, name)
                 logging.info('Group created: %s', name)
             case 'Student':
-                create_student(name)
+                dr.create_student(session, name, group)
                 logging.info('Student created: %s', name)
             case 'Subject':
-                teacher = get_teacher(id)
-                create_subject(name, teacher)
+                teacher = dr.get_teacher(session, id)
+                dr.create_subject(session, name, teacher)
                 logging.info('Subject created: %s', name)
             case 'Grade':
-                student = get_student(id)
-                subject = get_subject(subject)
-                create_grade(student, subject, value)
+                student = dr.get_student(session, id)
+                subject = dr.get_subject(session, subject)
+                dr.create_grade(session, student, subject, value)
                 logging.info('Grade created for student ID %s and subject ID %s', id, subject)
     except ValueError as ve:
         logging.error('ValueError: %s', str(ve))
     except Exception as e:
         logging.error('Error occurred during create operation: %s', str(e))
 
-def update():
+def update(session):
     try:
         if not model:
             raise ValueError('Model parameter is missing')
@@ -75,19 +79,19 @@ def update():
         
         match model:
             case 'Teacher':
-                update_teacher(id, name)
+                dr.update_teacher(session, id, name)
                 logging.info('Teacher updated: ID %s, new name: %s', id, name)
             case 'Group':
-                update_group(id, name)
+                dr.update_group(session, id, name)
                 logging.info('Group updated: ID %s, new name: %s', id, name)
             case 'Student':
-                update_student(id, name)
+                dr.update_student(session, id, name)
                 logging.info('Student updated: ID %s, new name: %s', id, name)
             case 'Subject':
-                update_subject(id, name)
+                dr.update_subject(session, id, name)
                 logging.info('Subject updated: ID %s, new name: %s', id, name)
             case 'Grade':
-                update_grade(id, value)
+                dr.update_grade(session, id, value)
                 logging.info('Grade updated: ID %s, new value: %s', id, value)
 
     except ValueError as ve:
@@ -95,7 +99,7 @@ def update():
     except Exception as e:
         logging.error('Error occurred during update operation: %s', str(e))
 
-def remove():
+def remove(session):
     try:
 
         if not id:
@@ -103,19 +107,19 @@ def remove():
         
         match model:
             case 'Teacher':
-                delete_teacher(id)
+                dr.delete_teacher(session, id)
                 logging.info('Teacher deleted: ID %s', id)
             case 'Group':
-                delete_group(id)
+                dr.delete_group(session, id)
                 logging.info('Group deleted: ID %s', id)
             case 'Student':
-                delete_student(id)
+                dr.delete_student(session, id)
                 logging.info('Student deleted: ID %s', id)
             case 'Subject':
-                delete_subject(id)
+                dr.delete_subject(session, id)
                 logging.info('Subject deleted: ID %s', id)
             case 'Grade':
-                delete_grade(id)
+                dr.delete_grade(session, id)
                 logging.info('Grade deleted: ID %s', id)
 
     except ValueError as ve:
@@ -123,7 +127,7 @@ def remove():
     except Exception as e:
         logging.error('Error occurred during remove operation: %s', str(e))
 
-def get():
+def get(session):
     try:
 
         if not id:
@@ -131,19 +135,19 @@ def get():
 
         match model:
             case 'Teacher':
-                teacher = get_teacher(id)
+                teacher = dr.gteacher(session, id)
                 logging.info('Teacher details: ID %s, Name: %s', id, teacher.name)
             case 'Group':
-                group = get_group(id)
+                group = dr.ggroup(session, id)
                 logging.info('Group details: ID %s, Name: %s', id, group.name)
             case 'Student':
-                student = get_student(id)
+                student = dr.gstudent(session, id)
                 logging.info('Student details: ID %s, Name: %s', id, student.name)
             case 'Subject':
-                subject = get_subject(id)
+                subject = dr.gsubject(session, id)
                 logging.info('Subject details: ID %s, Name: %s', id, subject.name)
             case 'Grade':
-                grade = get_grade(id)
+                grade = dr.ggrade(session, id)
                 logging.info('Grade details: ID %s, Value: %s', id, grade.value)
 
     except ValueError as ve:
@@ -151,35 +155,43 @@ def get():
     except Exception as e:
         logging.error('Error occurred during get operation: %s', str(e))
 
-def list_():
+def list_(session):
     try:
 
         match model:
             case 'Teacher':
-                list_teachers()
+                dr.list_teachers(session)
             case 'Group':
-                list_groups()
+                dr.list_groups(session)
             case 'Student':
-                list_students()
+                dr.list_students(session)
             case 'Subject':
-                list_subjects()
+                dr.list_subjects(session)
             case 'Grade':
-                list_grades()
+                dr.list_grades(session)
 
     except Exception as e:
         logging.error('Error occurred during get operation: %s', str(e))
 
-# Виклик відповідної функції залежно від команди
-match action:
-    case 'create':
-        create()
-    case 'update':
-        update()
-    case 'remove':
-        remove()
-    case 'get':
-        get()
-    case 'list':
-        list_()
-    case _:
-        parser.print_help()
+
+if __name__ == "__main__":
+
+
+    # Створення сесії
+
+    # Виклик відповідної функції залежно від команди
+
+    with DBSession() as session:
+        match action:
+            case 'create':
+                create(session)
+            case 'update':
+                update(session)
+            case 'remove':
+                remove(session)
+            case 'get':
+                get(session)
+            case 'list':
+                list_(session)
+            case _:
+                parser.print_help()

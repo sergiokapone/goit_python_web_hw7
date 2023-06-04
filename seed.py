@@ -7,65 +7,86 @@ import random
 import logging
 
 from faker import Faker
+from database.db import DBSession, check_connection
+
 from database.repository import create_student,\
                                 create_group,\
                                 create_teacher,\
                                 create_subject,\
-                                create_grade
+                                create_grade,\
+                                clear_database
+
+from database.db import engine
+from database.models import Base
 
 
-fake = Faker("uk_UA")
-
-# Конфігурація логування
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-# Конфігурація логування
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+if check_connection():
 
-# Створюємо логгер
-logger = logging.getLogger(__name__)
+    # Створюємо базу данних
+    Base.metadata.create_all(engine)
 
-# Створюємо обробник для виведення попереджень у консоль
-warning_handler = logging.StreamHandler()
-warning_handler.setLevel(logging.WARNING)
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-warning_handler.setFormatter(formatter)
+    #Створюємо сесію
+    session = DBSession()
 
-# Додаємо обробник до логгера
-logger.addHandler(warning_handler)
+    fake = Faker("uk_UA")
+
+    # Конфігурація логування
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-# Створюємо 5 вчителів
-teachers = []
-for _ in range(5):
-    teacher = create_teacher(name=fake.name())
-    teachers.append(teacher)
+    # Конфігурація логування
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Створюємо предмети з відповідними вчителями
-subjects = []
-subject_names = ["Фізика", "Математика", "Хімія", "Історія", "Географія"]
-for subject_name, teacher in zip(subject_names, teachers):
-    subject = create_subject(name=subject_name, teacher=teacher)
-    subjects.append(subject)
+    # Створюємо логгер
+    logger = logging.getLogger(__name__)
 
-# Створюємо 3 групи
-groups = []
-group_names = ["ФФ-11", "ФФ-12", "ФФ-13"]
-for group_name in group_names:
-    group = create_group(name=group_name)
-    groups.append(group)
+    # Створюємо обробник для виведення попереджень у консоль
+    warning_handler = logging.StreamHandler()
+    warning_handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    warning_handler.setFormatter(formatter)
 
-# Створюємо 50 студентів
-for _ in range(50):
-    student_name = fake.name()
-    group = random.choice(groups)
-    student = create_student(name=student_name, group=group)
+    # Додаємо обробник до логгера
+    logger.addHandler(warning_handler)
 
-    # Створюємо 20 оцінок для кожного студента з усіх предметів
-    for _ in range(20):
-        subject = random.choice(subjects)
-        value = fake.random_int(min=1, max=100)
-        create_grade(student=student, subject=subject, value=value)
+    # Очищуємо базу даних перед внесенням даних
+    clear_database(session=session)
 
-logger.info("Data was successfully generated and added to the database.")
+
+    # Створюємо 5 вчителів
+    teachers = []
+    for _ in range(5):
+        teacher = create_teacher(session=session, name=fake.name())
+        teachers.append(teacher)
+
+    # Створюємо предмети з відповідними вчителями
+    subjects = []
+    subject_names = ["Фізика", "Математика", "Хімія", "Історія", "Географія"]
+    for subject_name, teacher in zip(subject_names, teachers):
+        subject = create_subject(session=session, name=subject_name, teacher=teacher)
+        subjects.append(subject)
+
+    # Створюємо 3 групи
+    groups = []
+    group_names = ["ФФ-11", "ФФ-12", "ФФ-13"]
+    for group_name in group_names:
+        group = create_group(session=session, name=group_name)
+        groups.append(group)
+
+    # Створюємо 50 студентів
+    for _ in range(50):
+        student_name = fake.name()
+        group = random.choice(groups)
+        student = create_student(session=session, name=student_name, group=group)
+
+        # Створюємо 20 оцінок для кожного студента з усіх предметів
+        for _ in range(20):
+            subject = random.choice(subjects)
+            value = fake.random_int(min=1, max=100)
+            create_grade(session=session, student=student, subject=subject, value=value)
+
+    logger.info("Data was successfully generated and added to the database.")
+
+    session.close()

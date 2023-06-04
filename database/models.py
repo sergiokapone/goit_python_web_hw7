@@ -6,7 +6,6 @@
 
 from sqlalchemy import Column, DateTime, Integer, String, ForeignKey, func, event
 from sqlalchemy.orm import relationship, declarative_base
-from database.db import engine
 
 Base = declarative_base()
 
@@ -69,4 +68,4 @@ def update_updated_at(mapper, conn, target):
     target.updated_at = func.now()
 
 
-Base.metadata.create_all(engine)
+

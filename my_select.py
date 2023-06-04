@@ -1,32 +1,40 @@
 from pprint import pprint
 import random
 from sqlalchemy import Float, func
+
+
+
 from database.models import Student, Group, Teacher, Subject, Grade
 from database.db import session
 from sqlalchemy import cast
-from database.repository import get_teacher, get_max_teachers_count,\
-                                get_student, get_max_students_count,\
-                                get_group, get_max_groups_count,\
-                                get_subject, get_max_subjects_count
+from database.repository import get_all_teachers,\
+                                get_all_students,\
+                                get_all_subjects,\
+                                get_all_groups
 
 
 def select_random_teacher():
- 
-    return get_teacher(random.randint(1, get_max_teachers_count())).name
+    all_teachers = get_all_teachers()
+    random_teacher = random.choice(all_teachers)
+    return random_teacher.name
 
 
 def select_random_student():
+    all_students = get_all_students()
+    random_student = random.choice(all_students)
+    return random_student.name
 
-    return get_student(random.randint(1, get_max_students_count())).name
 
 def select_random_group():
-
-    return get_group(random.randint(1, get_max_groups_count())).name
+    all_groups = get_all_groups()
+    random_group = random.choice(all_groups)
+    return random_group.name
 
 
 def select_random_subject():
-
-    return get_subject(random.randint(1, get_max_subjects_count())).name
+    all_subjects = get_all_subjects()
+    random_subject = random.choice(all_subjects)
+    return random_subject.name
 
 
 def select_1():
@@ -183,20 +191,24 @@ def select_12(group_name, subject_name):
 
 
 def execute_query(query_func, *args):
-    # З'єднання з базою даних
-    db_session = session
 
-    # Виконання запиту
-    result = query_func(*args)
+    try:
+        # З'єднання з базою даних
+        db_session = session
 
-    # закриття сесії
-    db_session.close()
+        # Виконання запиту
+        result = query_func(*args)
+
+        # Закриття сесії
+        db_session.close()
+    except Exception:
+        return "Can not connect with database." 
+
 
     return result
 
 
 if __name__ == '__main__':
-
    
     queries = [
         (select_1,),
