@@ -100,7 +100,7 @@ options:
 
 - Показати всіх вчителів: `python main.py -a list -m Teacher`
 - Створити вчителя: `python main.py -a create -m Teacher -n "Mister X"`
-- Ооновити дані вчителя з `id=3`: `python main.py -a update -m Teacher --id 3 -name "Andry Bezos" `
+- Ооновити дані вчителя з `id=3`: `python main.py -a update -m Teacher --id 3 --name "Andry Bezos" `
 - Показати всі групи: `python main.py -a list -m Group`
 - Створити групу: `python main.py -a create -m Group -n "AD-101"`
 - ...
