@@ -35,7 +35,7 @@
 │   ├── models.py           # Визначення моделей даних
 │   └── repository.py       # Код виконання операцій CRUD
 ├── Pipfile
-├── alembic.cmd             # Робота з міграціями
+├── alembic_run_.cmd        # Робота з міграціями
 ├── docker_run.cmd          # Запуск контейнера з базою даних
 ├── project_run.cmd         # Зручний запуск і демонстрація роботи
 ├── alembic.ini             # Налаштування alembic
@@ -56,7 +56,7 @@ docker run --name students -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgre
 
 ## Створення міграцій
 
-Для створення міграцій скористайтесь файлом `alembic.cmd`.
+Для створення міграцій скористайтесь файлом `alembic_run_.cmd`.
 Меню скрипта має вигляд:
 
 ```text
