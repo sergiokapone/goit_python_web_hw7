@@ -1,3 +1,4 @@
+REM Run if Docker is installed on the system
 @echo off
 REM Перевіряємо наявність контейнера
 docker ps -a -f name=students | findstr students
@@ -16,3 +17,5 @@ SET "CURRENT_PATH=%~dp0"
 
 ::Для збереження бвзи в контейнері
 docker run --name students -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
+
+pause
