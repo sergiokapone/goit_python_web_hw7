@@ -1,4 +1,4 @@
-# Домашнє завдання #7
+# Домашнє завдання #7 <img align="right" width="32px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" /> <img align="right" width="32px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" /><img align="right" width="32px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlalchemy/sqlalchemy-original.svg" />
 
 Робота з базою [`PostgreSQL`](https://www.postgresql.org/)[^1] за допомогою [`ORM SQLAlchemy`](https://www.sqlalchemy.org/)[^2].
 
